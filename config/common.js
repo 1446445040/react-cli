@@ -1,11 +1,13 @@
 const path = require('path')
-const HtmlWebPackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { NamedChunksPlugin } = require('webpack')
+const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebPackPlugin = require('html-webpack-plugin')
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const HappyPack = require('happypack')
 const env = require('./env')
 
@@ -16,6 +18,15 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/'
+  },
+  resolve: {
+    // 配合 Hoisting，优先采用es6 module语法，可使用启动参数 --display-optimization-bailout 查看降级处理的代码
+    mainFields: ['jsnext:main', 'browser', 'main']
+  },
+  watchOptions: {
+    ignored: /node_modules/,
+    aggregateTimeout: 300, // 防抖
+    poll: 1000
   },
   optimization: {
     splitChunks: {
@@ -56,7 +67,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, '../src'),
         loader: 'happypack/loader?id=js'
       },
       {
@@ -94,6 +105,7 @@ module.exports = {
   },
   plugins: [
     new NamedChunksPlugin(),
+    new ModuleConcatenationPlugin(), // 开启 Hoisting
     new CaseSensitivePathsPlugin(), // 区分绝对路径大小写
     new FriendlyErrorsWebpackPlugin({
       compilationSuccessInfo: {
@@ -101,6 +113,20 @@ module.exports = {
           `App is running at http://localhost:${env.port}`
         ]
       }
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:8].css',
+      chunkFilename: 'css/[name].[contenthash:8].css'
+    }),
+    new HappyPack({
+      id: 'style',
+      loaders: ['css-loader', 'postcss-loader'],
+      threadPool: HappyTheadPool
+    }),
+    new HappyPack({
+      id: 'js',
+      loaders: ['cache-loader', 'babel-loader', 'eslint-loader'],
+      threadPool: HappyTheadPool
     }),
     new CopyWebpackPlugin({
       patterns: [{
@@ -119,19 +145,17 @@ module.exports = {
         removeScriptTypeAttributes: true
       }
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[name].[contenthash:8].css'
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'initial',
+      fileBlacklist: [
+        /\.map$/,
+        /hot-update\.js$/
+      ]
     }),
-    new HappyPack({
-      id: 'style',
-      loaders: ['css-loader', 'postcss-loader'],
-      threadPool: HappyTheadPool
-    }),
-    new HappyPack({
-      id: 'js',
-      loaders: ['cache-loader', 'babel-loader', 'eslint-loader'],
-      threadPool: HappyTheadPool
+    new PreloadWebpackPlugin({
+      rel: 'prefetch',
+      include: 'asyncChunks'
     })
   ]
 }
