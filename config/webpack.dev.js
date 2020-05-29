@@ -1,8 +1,4 @@
-const {
-  DefinePlugin,
-  HotModuleReplacementPlugin,
-  NamedChunksPlugin
-} = require('webpack')
+const { DefinePlugin, HotModuleReplacementPlugin } = require('webpack')
 const merge = require('webpack-merge')
 const env = require('./env')
 const commonConfig = require('./common')
@@ -16,23 +12,10 @@ const devConfig = {
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     port: env.port,
-    quiet: true,
+    quiet: true, // 不打印日志
     hot: true
   },
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.styl(us)?$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'stylus-loader']
-      }
-    ]
-  },
   plugins: [
-    new NamedChunksPlugin(),
     new HotModuleReplacementPlugin(),
     new DefinePlugin({
       'process.env': {

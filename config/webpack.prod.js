@@ -1,4 +1,3 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { HashedModuleIdsPlugin, DefinePlugin } = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
@@ -12,40 +11,17 @@ const prodConfig = {
     chunkFilename: 'js/[name].[contenthash:8].js'
   },
   devtool: 'cheap-module-source-map',
-  module: {
-    rules: [
-      {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.styl(us)?$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'postcss-loader',
-          'stylus-loader'
-        ]
-      }
-    ]
-  },
   plugins: [
     new BundleAnalyzerPlugin(),
     new HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(),
+    // 环境变量定义
     new DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"'
       }
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css',
-      chunkFilename: 'css/[name].[contenthash:8].css'
-    }),
+    // 使用hash值作为模块id
     new HashedModuleIdsPlugin({
       hashDigest: 'hex'
     })
