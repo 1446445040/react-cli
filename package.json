@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config config/webpack.dev.js --progress",
-    "build": "webpack --config config/webpack.prod.js --progress"
+    "build": "webpack --config config/webpack.prod.js --progress --display-used-exports"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +48,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "antd": "^4.2.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   }

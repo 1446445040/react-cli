@@ -22,14 +22,12 @@ const devConfig = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader']
+      },
+      {
         test: /\.styl(us)?$/,
-        exclude: /node_modules/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'postcss-loader',
-          'stylus-loader'
-        ]
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'stylus-loader']
       }
     ]
   },
@@ -38,7 +36,7 @@ const devConfig = {
     new HotModuleReplacementPlugin(),
     new DefinePlugin({
       'process.env': {
-        NODE_ENV: 'development'
+        NODE_ENV: '"development"'
       }
     })
   ]

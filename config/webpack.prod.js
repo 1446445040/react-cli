@@ -16,7 +16,6 @@ const prodConfig = {
     rules: [
       {
         test: /\.css$/,
-        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -25,7 +24,6 @@ const prodConfig = {
       },
       {
         test: /\.styl(us)?$/,
-        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
@@ -37,12 +35,11 @@ const prodConfig = {
   },
   plugins: [
     new BundleAnalyzerPlugin(),
-    new MiniCssExtractPlugin(),
     new HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(),
     new DefinePlugin({
       'process.env': {
-        NODE_ENV: 'production'
+        NODE_ENV: '"production"'
       }
     }),
     new MiniCssExtractPlugin({

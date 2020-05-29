@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import './style.styl'
+import React from 'react'
+import TodoList from './TodoList'
 
 function App () {
-  const [text, setText] = useState('this is my first react app')
   return (
-    <div onClick={() => setText('clicked！')}>
-      {text}
-    </div>
+    <TodoList />
   )
 }
 
