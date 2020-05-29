@@ -13,6 +13,7 @@ const devConfig = {
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].js'
   },
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
     port: env.port,
     quiet: true,

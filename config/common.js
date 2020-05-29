@@ -34,7 +34,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
+        use: ['cache-loader', 'babel-loader', 'thread-loader', 'eslint-loader']
       }
     ]
   },

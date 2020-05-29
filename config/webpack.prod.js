@@ -11,6 +11,7 @@ const prodConfig = {
     filename: 'js/[name].[contenthash:8].js',
     chunkFilename: 'js/[name].[contenthash:8].js'
   },
+  devtool: 'cheap-module-source-map',
   module: {
     rules: [
       {
@@ -18,7 +19,7 @@ const prodConfig = {
         exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { importLoaders: 1 } },
+          'css-loader',
           'postcss-loader'
         ]
       },
@@ -27,7 +28,7 @@ const prodConfig = {
         exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { importLoaders: 2 } },
+          'css-loader',
           'postcss-loader',
           'stylus-loader'
         ]
@@ -35,10 +36,10 @@ const prodConfig = {
     ]
   },
   plugins: [
+    new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin(),
     new HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(),
-    new BundleAnalyzerPlugin(),
     new DefinePlugin({
       'process.env': {
         NODE_ENV: 'production'
