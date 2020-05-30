@@ -1,8 +1,8 @@
-const { DefinePlugin, HotModuleReplacementPlugin } = require("webpack");
-const portfinder = require("portfinder");
-const merge = require("webpack-merge");
-const env = require("./env");
-const commonConfig = require("./webpack.base");
+const { DefinePlugin } = require('webpack')
+const portfinder = require('portfinder')
+const merge = require('webpack-merge')
+const env = require('./env')
+const commonConfig = require('./webpack.base')
 
 const devConfig = {
   mode: 'development',
@@ -29,12 +29,9 @@ const devConfig = {
           }
         }
       )
-    }),
-    quiet: true, // 不打印日志
-    hot: true
+    })
   },
   plugins: [
-    new HotModuleReplacementPlugin(),
     new DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"'

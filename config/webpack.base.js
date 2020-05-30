@@ -1,5 +1,4 @@
 const path = require('path')
-const { NamedChunksPlugin } = require('webpack')
 const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
@@ -109,9 +108,6 @@ module.exports = {
       title: 'React Project',
       filename: path.resolve(__dirname, '../dist/index.html'),
       template: path.resolve(__dirname, '../public/index.html'),
-      templateParameters: {
-        BASE_URL: env.baseUrl
-      },
       inject: true,
       minify: {
         removeComments: true,

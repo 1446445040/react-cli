@@ -8,6 +8,14 @@ function TodoList () {
   function addItem () {
     setItems([...items, text])
     setText('')
+
+    // 异步模块测试
+    import(
+      /* webpackChunkName: "test" */
+      './printLog'
+    ).then(({ default: print }) => {
+      print('测试信息：' + text)
+    })
   }
 
   return (
