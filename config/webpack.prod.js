@@ -2,7 +2,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { HashedModuleIdsPlugin, DefinePlugin } = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const merge = require('webpack-merge')
-const commonConfig = require('./common')
+const commonConfig = require('./webpack.base')
 
 const prodConfig = {
   mode: 'production',
