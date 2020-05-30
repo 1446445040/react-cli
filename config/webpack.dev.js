@@ -13,7 +13,14 @@ const devConfig = {
   devServer: {
     port: env.port,
     quiet: true, // 不打印日志
-    hot: true
+    hot: true,
+    clientLogLevel: 'error',
+    overlay: true // 是否将错误显示在网页中
+  },
+  watchOptions: {
+    ignored: /node_modules/,
+    aggregateTimeout: 300, // 防抖
+    poll: 1000
   },
   plugins: [
     new HotModuleReplacementPlugin(),

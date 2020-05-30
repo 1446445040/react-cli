@@ -4,10 +4,8 @@ const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenat
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const TerserWebpackPlugin = require('terser-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
-const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const HappyPack = require('happypack')
 const env = require('./env')
 
@@ -22,46 +20,6 @@ module.exports = {
   resolve: {
     // 配合 Hoisting，优先采用es6 module语法，可使用启动参数 --display-optimization-bailout 查看降级处理的代码
     mainFields: ['jsnext:main', 'browser', 'main']
-  },
-  watchOptions: {
-    ignored: /node_modules/,
-    aggregateTimeout: 300, // 防抖
-    poll: 1000
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        // 提取node_modules
-        vendors: {
-          name: 'chunk-vendors',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-          chunks: 'initial'
-        },
-        // 公共依赖
-        common: {
-          name: 'common',
-          chunks: 'all',
-          minSize: 20,
-          minChunks: 2
-        }
-      }
-    },
-    minimizer: [
-      new TerserWebpackPlugin({
-        cache: true, // 文件缓存
-        parallel: true, // 多进程压缩
-        terserOptions: {
-          compress: {
-            collapse_vars: true, // 内嵌变量
-            reduce_vars: true // 提取常量
-          },
-          output: {
-            comments: false // 是否保留注释
-          }
-        }
-      })
-    ]
   },
   module: {
     rules: [
@@ -131,12 +89,17 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [{
         from: path.resolve(__dirname, '../public'),
-        to: path.resolve(__dirname, '../dist')
+        to: path.resolve(__dirname, '../dist'),
+        toType: 'dir',
+        globOptions: {
+          ignore: ['.DS_Store', 'index.html']
+        }
       }]
     }),
     new HtmlWebPackPlugin({
       title: 'React Project',
       template: path.resolve(__dirname, '../public/index.html'),
+      inject: true,
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -144,18 +107,6 @@ module.exports = {
         collapseBooleanAttributes: true,
         removeScriptTypeAttributes: true
       }
-    }),
-    new PreloadWebpackPlugin({
-      rel: 'preload',
-      include: 'initial',
-      fileBlacklist: [
-        /\.map$/,
-        /hot-update\.js$/
-      ]
-    }),
-    new PreloadWebpackPlugin({
-      rel: 'prefetch',
-      include: 'asyncChunks'
     })
   ]
 }

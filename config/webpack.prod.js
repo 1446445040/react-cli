@@ -1,6 +1,8 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { HashedModuleIdsPlugin, DefinePlugin } = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const TerserWebpackPlugin = require('terser-webpack-plugin')
+const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const merge = require('webpack-merge')
 const commonConfig = require('./common')
 
@@ -11,6 +13,41 @@ const prodConfig = {
     chunkFilename: 'js/[name].[contenthash:8].js'
   },
   devtool: 'cheap-module-source-map',
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        // 提取node_modules
+        vendors: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          chunks: 'initial'
+        },
+        // 公共依赖
+        common: {
+          name: 'common',
+          chunks: 'all',
+          minSize: 20,
+          minChunks: 2
+        }
+      }
+    },
+    minimizer: [
+      new TerserWebpackPlugin({
+        cache: true, // 文件缓存
+        parallel: true, // 多进程压缩
+        terserOptions: {
+          compress: {
+            collapse_vars: true, // 内嵌变量
+            reduce_vars: true // 提取常量
+          },
+          output: {
+            comments: false // 是否保留注释
+          }
+        }
+      })
+    ]
+  },
   plugins: [
     new BundleAnalyzerPlugin(),
     new HashedModuleIdsPlugin(),
@@ -24,6 +61,18 @@ const prodConfig = {
     // 使用hash值作为模块id
     new HashedModuleIdsPlugin({
       hashDigest: 'hex'
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'initial',
+      fileBlacklist: [
+        /\.map$/,
+        /hot-update\.js$/
+      ]
+    }),
+    new PreloadWebpackPlugin({
+      rel: 'prefetch',
+      include: 'asyncChunks'
     })
   ]
 }
