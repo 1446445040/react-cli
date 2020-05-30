@@ -12,7 +12,7 @@ function TodoList () {
 
   return (
     <Fragment>
-      <Input value={text} onChange={e => setText(e.target.value)} />
+      <Input value={text} onChange={(e) => setText(e.target.value)} />
       <Button onClick={addItem}>添加</Button>
       <List
         bordered
