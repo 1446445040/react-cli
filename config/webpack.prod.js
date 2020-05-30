@@ -14,24 +14,6 @@ const prodConfig = {
   },
   devtool: 'cheap-module-source-map',
   optimization: {
-    splitChunks: {
-      cacheGroups: {
-        // 提取node_modules
-        vendors: {
-          name: 'chunk-vendors',
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10,
-          chunks: 'initial'
-        },
-        // 公共依赖
-        common: {
-          name: 'common',
-          chunks: 'all',
-          minSize: 20,
-          minChunks: 2
-        }
-      }
-    },
     minimizer: [
       new TerserWebpackPlugin({
         cache: true, // 文件缓存
@@ -50,7 +32,6 @@ const prodConfig = {
   },
   plugins: [
     new BundleAnalyzerPlugin(),
-    new HashedModuleIdsPlugin(),
     new CleanWebpackPlugin(),
     // 环境变量定义
     new DefinePlugin({

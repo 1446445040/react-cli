@@ -21,6 +21,26 @@ module.exports = {
     // 配合 Hoisting，优先采用es6 module语法，可使用启动参数 --display-optimization-bailout 查看降级处理的代码
     mainFields: ['jsnext:main', 'browser', 'main']
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        // 提取node_modules
+        vendors: {
+          name: 'chunk-vendors',
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          chunks: 'initial'
+        },
+        // 公共依赖
+        common: {
+          name: 'common',
+          chunks: 'all',
+          minSize: 20,
+          minChunks: 2
+        }
+      }
+    }
+  },
   module: {
     rules: [
       {
@@ -62,7 +82,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new NamedChunksPlugin(),
     new ModuleConcatenationPlugin(), // 开启 Hoisting
     new CaseSensitivePathsPlugin(), // 区分绝对路径大小写
     new FriendlyErrorsWebpackPlugin({
@@ -86,6 +105,22 @@ module.exports = {
       loaders: ['cache-loader', 'babel-loader', 'eslint-loader'],
       threadPool: HappyTheadPool
     }),
+    new HtmlWebPackPlugin({
+      title: 'React Project',
+      filename: path.resolve(__dirname, '../dist/index.html'),
+      template: path.resolve(__dirname, '../public/index.html'),
+      templateParameters: {
+        BASE_URL: env.baseUrl
+      },
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        collapseBooleanAttributes: true,
+        removeScriptTypeAttributes: true
+      }
+    }),
     new CopyWebpackPlugin({
       patterns: [{
         from: path.resolve(__dirname, '../public'),
@@ -95,18 +130,6 @@ module.exports = {
           ignore: ['.DS_Store', 'index.html']
         }
       }]
-    }),
-    new HtmlWebPackPlugin({
-      title: 'React Project',
-      template: path.resolve(__dirname, '../public/index.html'),
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        collapseBooleanAttributes: true,
-        removeScriptTypeAttributes: true
-      }
     })
   ]
 }
