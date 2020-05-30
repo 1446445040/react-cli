@@ -5,7 +5,24 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config config/webpack.dev.js --progress",
-    "build": "webpack --config config/webpack.prod.js --progress"
+    "build": "webpack --config config/webpack.prod.js --progress",
+    "format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{jsx,js}": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -36,12 +53,14 @@
     "friendly-errors-webpack-plugin": "^1.7.0",
     "happypack": "^5.0.1",
     "html-webpack-plugin": "^4.3.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.7",
     "mini-css-extract-plugin": "^0.9.0",
     "portfinder": "^1.0.26",
     "postcss-cssnext": "^3.1.0",
     "postcss-loader": "^3.0.0",
-    "preload-webpack-plugin": "^3.0.0-beta.4",
-    "react-hot-loader": "^4.12.21",
+    "preload-webpack-plugin": "^3.0.0-beta.3",
+    "prettier": "^2.0.5",
     "style-loader": "^1.2.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",

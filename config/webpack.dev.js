@@ -1,21 +1,16 @@
-const path = require('path')
-const portfinder = require('portfinder')
-const { DefinePlugin } = require('webpack')
-const merge = require('webpack-merge')
-const env = require('./env')
-const commonConfig = require('./webpack.base')
+const { DefinePlugin, HotModuleReplacementPlugin } = require("webpack");
+const portfinder = require("portfinder");
+const merge = require("webpack-merge");
+const env = require("./env");
+const commonConfig = require("./webpack.base");
 
 const devConfig = {
   mode: 'development',
-  entry: [
-    'react-hot-loader/patch',
-    path.resolve(__dirname, '../src/index.js')
-  ],
   output: {
     filename: 'js/[name].js',
     chunkFilename: 'js/[name].js'
   },
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
     quiet: true, // 不打印日志
     hot: true,
@@ -34,15 +29,12 @@ const devConfig = {
           }
         }
       )
-    })
-  },
-  watch: true,
-  watchOptions: {
-    ignored: /node_modules/,
-    aggregateTimeout: 300, // 防抖
-    poll: 1000
+    }),
+    quiet: true, // 不打印日志
+    hot: true
   },
   plugins: [
+    new HotModuleReplacementPlugin(),
     new DefinePlugin({
       'process.env': {
         NODE_ENV: '"development"'

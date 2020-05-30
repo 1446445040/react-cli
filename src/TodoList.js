@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Input, List, Button, Col, Row } from 'antd'
+import { Input, List, Button } from 'antd'
 
 function TodoList () {
   const [text, setText] = useState('')
@@ -12,24 +12,13 @@ function TodoList () {
 
   return (
     <Fragment>
-      <Row>
-        <Col>
-          <Input
-            value={text}
-            onChange={e => setText(e.target.value)}
-          />
-        </Col>
-        <Col>
-          <Button onClick={addItem}>添加</Button>
-        </Col>
-      </Row>
-      <Row>
-        <List
-          bordered
-          dataSource={items}
-          renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-        />
-      </Row>
+      <Input value={text} onChange={(e) => setText(e.target.value)} />
+      <Button onClick={addItem}>添加</Button>
+      <List
+        bordered
+        dataSource={items}
+        renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
+      />
     </Fragment>
   )
 }
