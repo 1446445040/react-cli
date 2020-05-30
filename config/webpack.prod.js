@@ -4,7 +4,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const merge = require('webpack-merge')
-const commonConfig = require('./common')
+const commonConfig = require('./webpack.base')
 
 const prodConfig = {
   mode: 'production',
