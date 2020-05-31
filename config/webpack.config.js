@@ -2,6 +2,7 @@ const Config = require('webpack-chain')
 const paths = require('./paths')
 const setModule = require('./modules')
 const setPlugins = require('./plugins')
+const setResolve = require('./resolve')
 
 const config = new Config()
 const isDev = process.env.NODE_ENV === 'development'
@@ -17,10 +18,12 @@ config.output
   .publicPath(paths.publicPuth)
 
 if (!isDev) {
+  config.devtool('cheap-module-source-map')
   config.output
     .filename('js/[name].[contenthash:8].js')
     .chunkFilename('js/[name].[contenthash:8].js')
 } else {
+  config.devtool('cheap-module-eval-source-map')
   config.output
     .filename('js/[name].[hash].js')
     .chunkFilename('js/[name].[hash].js')
@@ -28,8 +31,8 @@ if (!isDev) {
 
 config.devServer
   .quiet(true)
-  .clientLogLevel('error')
-  .overlay(true)
+  .clientLogLevel('none') // 客户端控制台不输出日志
+  .overlay(true) // 直接将错误显示到网页上
   .historyApiFallback(true)
 
 // 配合 Hoisting，优先采用es6 module语法，可使用启动参数 --display-optimization-bailout 查看降级处理的代码
@@ -57,7 +60,6 @@ config.optimization
 
 setModule(config)
 setPlugins(config)
-
-console.log(config.toString())
+setResolve(config)
 
 module.exports = config.toConfig()

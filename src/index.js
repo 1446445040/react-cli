@@ -1,7 +1,11 @@
 import React from 'react'
-import ReactDom from 'react-dom'
+import ReactDOM from 'react-dom'
 import App from './App'
-import './style.styl'
-import 'antd/dist/antd.min.css'
+import './index.styl'
 
-ReactDom.render(<App />, document.getElementById('app'))
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('app')
+)
