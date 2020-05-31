@@ -8,7 +8,9 @@ const HtmlWebPackPlugin = require('html-webpack-plugin')
 const HappyPack = require('happypack')
 const env = require('./env')
 
-const HappyTheadPool = HappyPack.ThreadPool({ size: require('os').cpus().length })
+const HappyTheadPool = HappyPack.ThreadPool({
+  size: require('os').cpus().length
+})
 
 module.exports = {
   entry: path.resolve(__dirname, '../src/index.js'),
@@ -49,10 +51,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: [
-          MiniCssExtractPlugin.loader,
-          'happypack/loader?id=style'
-        ]
+        loader: [MiniCssExtractPlugin.loader, 'happypack/loader?id=style']
       },
       {
         test: /\.styl(us)?$/,
@@ -77,6 +76,68 @@ module.exports = {
           'happypack/loader?id=style',
           'sass-loader'
         ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 4096,
+              fallback: {
+                loader: 'file-loader',
+                options: {
+                  name: 'img/[name].[hash:8].[ext]'
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(svg)(\?.*)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'img/[name].[hash:8].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 4096,
+              fallback: {
+                loader: 'file-loader',
+                options: {
+                  name: 'media/[name].[hash:8].[ext]'
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 4096,
+              fallback: {
+                loader: 'file-loader',
+                options: {
+                  name: 'fonts/[name].[hash:8].[ext]'
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },
@@ -85,9 +146,7 @@ module.exports = {
     new CaseSensitivePathsPlugin(), // 区分绝对路径大小写
     new FriendlyErrorsWebpackPlugin({
       compilationSuccessInfo: {
-        messages: [
-          `App is running at http://localhost:${env.port}`
-        ]
+        messages: [`App is running at http://localhost:${env.port}`]
       }
     }),
     new MiniCssExtractPlugin({
@@ -118,14 +177,16 @@ module.exports = {
       }
     }),
     new CopyWebpackPlugin({
-      patterns: [{
-        from: path.resolve(__dirname, '../public'),
-        to: path.resolve(__dirname, '../dist'),
-        toType: 'dir',
-        globOptions: {
-          ignore: ['.DS_Store', 'index.html']
+      patterns: [
+        {
+          from: path.resolve(__dirname, '../public'),
+          to: path.resolve(__dirname, '../dist'),
+          toType: 'dir',
+          globOptions: {
+            ignore: ['.DS_Store', 'index.html']
+          }
         }
-      }]
+      ]
     })
   ]
 }
