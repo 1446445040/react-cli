@@ -12,8 +12,10 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
 const HappyPack = require('happypack')
 
-const HappyTheadPool = HappyPack.ThreadPool({ size: require('os').cpus().length })
 const isDev = process.env.NODE_ENV === 'development'
+const HappyTheadPool = HappyPack.ThreadPool({
+  size: require('os').cpus().length
+})
 
 /**
  * @param{Config} config
@@ -52,16 +54,19 @@ module.exports = config => {
     .plugin('happypack-style')
     .use(HappyPack, [{
       id: 'style',
-      loaders: ['css-loader', 'postcss-loader'],
-      threadPool: HappyTheadPool
+      threadPool: HappyTheadPool,
+      loaders: [
+        'css-loader',
+        'postcss-loader'
+      ]
     }])
 
   config
     .plugin('happypack-js')
     .use(HappyPack, [{
       id: 'js',
-      loaders: ['cache-loader', 'babel-loader', 'eslint-loader'],
-      threadPool: HappyTheadPool
+      threadPool: HappyTheadPool,
+      loaders: ['cache-loader', 'babel-loader', 'eslint-loader']
     }])
 
   config

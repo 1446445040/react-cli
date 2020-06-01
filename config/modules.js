@@ -1,4 +1,8 @@
 const paths = require('./paths')
+const isDev = process.env.NODE_ENV === 'development'
+const cssLoader = isDev
+  ? 'style-loader'
+  : 'mini-css-extract-plugin/dist/loader'
 
 /**
  * @param{Config} config
@@ -13,27 +17,27 @@ module.exports = config => {
   config.module
     .rule('css')
     .test(/\.css$/)
-    .use('css').loader('mini-css-extract-plugin/dist/loader').end()
+    .use('css').loader(cssLoader).end()
     .use('happypack-style').loader('happypack/loader?id=style')
 
   config.module
     .rule('stylus')
     .test(/\.styl(us)?$/)
-    .use('mini').loader('mini-css-extract-plugin/dist/loader').end()
+    .use('css').loader(cssLoader).end()
     .use('happypack-style').loader('happypack/loader?id=style').end()
     .use('stylus-loader').loader('stylus-loader')
 
   config.module
     .rule('sass')
     .test(/\.sass?$/)
-    .use('mini').loader('mini-css-extract-plugin/dist/loader').end()
+    .use('css').loader(cssLoader).end()
     .use('happypack-style').loader('happypack/loader?id=style').end()
     .use('sass-loader').loader('sass-loader')
 
   config.module
     .rule('less')
     .test(/\.less?$/)
-    .use('mini').loader('mini-css-extract-plugin/dist/loader').end()
+    .use('css').loader(cssLoader).end()
     .use('happypack-style').loader('happypack/loader?id=style').end()
     .use('less-loader').loader('less-loader')
 

@@ -8,7 +8,7 @@ const config = new Config()
 const isDev = process.env.NODE_ENV === 'development'
 
 config.entry('app')
-  .add(paths.srcPath)
+  .add(`${paths.srcPath}/index.js`)
   .end()
 
 config.mode(isDev ? 'development' : 'production')
