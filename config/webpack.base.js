@@ -7,10 +7,16 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const HappyPack = require('happypack')
 const env = require('./env')
+const { transformer, formatter } = require('./resolveLoaderError')
 
 const HappyTheadPool = HappyPack.ThreadPool({
   size: require('os').cpus().length
 })
+const isDev = process.env.NODE_ENV === 'development'
+console.log(isDev)
+const cssLoader = isDev
+  ? 'style-loader'
+  : 'mini-css-extract-plugin/dist/loader'
 
 module.exports = {
   entry: path.resolve(__dirname, '../src/index.js'),
@@ -51,31 +57,19 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: [MiniCssExtractPlugin.loader, 'happypack/loader?id=style']
+        loader: [cssLoader, 'happypack/loader?id=style']
       },
       {
         test: /\.styl(us)?$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'happypack/loader?id=style',
-          'stylus-loader'
-        ]
+        use: [cssLoader, 'happypack/loader?id=style', 'stylus-loader']
       },
       {
         test: /\.less$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'happypack/loader?id=style',
-          'less-loader'
-        ]
+        use: [cssLoader, 'happypack/loader?id=style', 'less-loader']
       },
       {
         test: /\.sass$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'happypack/loader?id=style',
-          'sass-loader'
-        ]
+        use: [cssLoader, 'happypack/loader?id=style', 'sass-loader']
       },
       {
         test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
@@ -147,7 +141,9 @@ module.exports = {
     new FriendlyErrorsWebpackPlugin({
       compilationSuccessInfo: {
         messages: [`App is running at http://localhost:${env.port}`]
-      }
+      },
+      additionalTransformers: [transformer],
+      additionalFormatters: [formatter]
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].[contenthash:8].css',

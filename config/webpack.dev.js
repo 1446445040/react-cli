@@ -1,4 +1,3 @@
-const { DefinePlugin } = require('webpack')
 const portfinder = require('portfinder')
 const merge = require('webpack-merge')
 const env = require('./env')
@@ -30,14 +29,7 @@ const devConfig = {
         }
       )
     })
-  },
-  plugins: [
-    new DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"development"'
-      }
-    })
-  ]
+  }
 }
 
 module.exports = merge(commonConfig, devConfig)

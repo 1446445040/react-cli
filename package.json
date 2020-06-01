@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config config/webpack.dev.js --progress --hot",
-    "build": "webpack --config config/webpack.prod.js --progress",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.dev.js --progress --hot",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.prod.js --progress",
     "format": "prettier src/**/*.{js,jsx,css,md} --write && eslint src/**/*.{jsx,js} --fix"
   },
   "husky": {
@@ -61,6 +61,7 @@
     "postcss-loader": "^3.0.0",
     "preload-webpack-plugin": "^3.0.0-beta.3",
     "prettier": "^2.0.5",
+    "style-loader": "^1.2.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "terser-webpack-plugin": "^3.0.2",
@@ -71,6 +72,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "cross-env": "^7.0.2",
     "file-loader": "^6.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

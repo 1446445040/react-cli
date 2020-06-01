@@ -1,5 +1,5 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const { HashedModuleIdsPlugin, DefinePlugin } = require('webpack')
+const { HashedModuleIdsPlugin } = require('webpack')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 const PreloadWebpackPlugin = require('preload-webpack-plugin')
@@ -33,12 +33,6 @@ const prodConfig = {
   plugins: [
     new BundleAnalyzerPlugin(),
     new CleanWebpackPlugin(),
-    // 环境变量定义
-    new DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
     // 使用hash值作为模块id
     new HashedModuleIdsPlugin({
       hashDigest: 'hex'
@@ -46,10 +40,7 @@ const prodConfig = {
     new PreloadWebpackPlugin({
       rel: 'preload',
       include: 'initial',
-      fileBlacklist: [
-        /\.map$/,
-        /hot-update\.js$/
-      ]
+      fileBlacklist: [/\.map$/, /hot-update\.js$/]
     }),
     new PreloadWebpackPlugin({
       rel: 'prefetch',
