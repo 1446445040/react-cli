@@ -80,6 +80,9 @@ module.exports = config => {
   config
     .plugin('friendly-errors')
     .use(FriendlyErrorsWebpackPlugin, [{
+      compilationSuccessInfo: {
+        messages: ['App is running at http://localhost:8080'],
+      },
       additionalTransformers: [transformer],
       additionalFormatters: [formatter]
     }])
