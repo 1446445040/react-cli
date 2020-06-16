@@ -1,0 +1,33 @@
+{
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true
+  },
+  "extends": [
+    "react-app",
+    "plugin:react/recommended",
+    "standard"
+  ],
+  "plugins": [
+    "react",
+    "@typescript-eslint"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 11,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React", // Pragma to use, default to "React"
+      "version": "detect" // 默认选择为已安装的react版本
+    }
+  },
+  "rules": {
+  }
+}
