@@ -2,20 +2,16 @@ const {
   override,
   useEslintRc,
   useBabelRc,
-  enableEslintTypescript
+  enableEslintTypescript,
+  addWebpackModuleRule
 } = require('customize-cra')
 
 module.exports = override(
   useBabelRc(),
   useEslintRc(),
   enableEslintTypescript(),
-  config => {
-    const stylusLoader = {
-      test: /\.styl$/,
-      use: ['style-loader', 'css-loader', 'stylus-loader']
-    }
-    const oneOf = config.module.rules.find(rule => rule.oneOf).oneOf
-    oneOf.unshift(stylusLoader)
-    return config
-  }
+  addWebpackModuleRule({
+    test: /\.styl$/,
+    use: ['style-loader', 'css-loader', 'stylus-loader']
+  })
 )
